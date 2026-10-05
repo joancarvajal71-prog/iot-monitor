@@ -1,0 +1,63 @@
+<div class="alertas">
+  <div class="page-header">
+    <h1>⚠️ Alertas del Sistema</h1>
+    <span>Monitoreo de valores fuera de rango</span>
+  </div>
+
+  <!-- RESUMEN -->
+  <div class="resumen">
+    <div class="resumen-card rojo">
+      <div class="resumen-valor">{{ totalPendientes }}</div>
+      <div class="resumen-label">Pendientes</div>
+    </div>
+    <div class="resumen-card verde">
+      <div class="resumen-valor">{{ totalResueltas }}</div>
+      <div class="resumen-label">Resueltas</div>
+    </div>
+    <div class="resumen-card dorado">
+      <div class="resumen-valor">{{ alertas.length }}</div>
+      <div class="resumen-label">Total</div>
+    </div>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="filtros">
+    <button [class.activo]="filtro === 'todas'" (click)="filtro = 'todas'">Todas</button>
+    <button [class.activo]="filtro === 'pendientes'" (click)="filtro = 'pendientes'">Pendientes</button>
+    <button [class.activo]="filtro === 'resueltas'" (click)="filtro = 'resueltas'">Resueltas</button>
+  </div>
+
+  <!-- CARGANDO -->
+  <div class="cargando" *ngIf="cargando">
+    <div class="spinner"></div>
+    <p>Cargando alertas...</p>
+  </div>
+
+  <!-- LISTA ALERTAS -->
+  <div class="lista" *ngIf="!cargando">
+    <div class="vacio" *ngIf="alertasFiltradas.length === 0">
+      ✅ No hay alertas en esta categoría
+    </div>
+    <div class="alerta-card" *ngFor="let a of alertasFiltradas"
+         [class.resuelta]="a.resuelta">
+      <div class="alerta-icono">
+        {{ a.resuelta ? '✅' : '⚠️' }}
+      </div>
+      <div class="alerta-info">
+        <div class="alerta-sensor">{{ a.sensor | titlecase }}</div>
+        <div class="alerta-mensaje">{{ a.mensaje }}</div>
+        <div class="alerta-detalle">
+          Valor: <strong>{{ a.valor }}</strong> |
+          Umbral: <strong>{{ a.umbral }}</strong> |
+          Tipo: <strong>{{ a.tipo }}</strong>
+        </div>
+        <div class="alerta-fecha">
+          {{ a.created_at | date:'dd/MM/yyyy HH:mm:ss' }}
+        </div>
+      </div>
+      <button class="btn-resolver" *ngIf="!a.resuelta" (click)="resolver(a.id)">
+        Resolver
+      </button>
+    </div>
+  </div>
+</div>

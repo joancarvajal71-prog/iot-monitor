@@ -1,0 +1,63 @@
+<div class="historial">
+  <div class="page-header">
+    <div>
+      <h1>📋 Historial de Lecturas</h1>
+      <span>{{ lecturas.length }} registros totales</span>
+    </div>
+    <button class="btn-excel" (click)="exportarExcel()">
+      📥 Exportar Excel
+    </button>
+  </div>
+
+  <div class="cargando" *ngIf="cargando">
+    <div class="spinner"></div>
+    <p>Cargando historial...</p>
+  </div>
+
+  <div class="contenido" *ngIf="!cargando">
+    <div class="tabla-wrap">
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Fecha y Hora</th>
+            <th>🌡️ Temp °C</th>
+            <th>💧 Hum %</th>
+            <th>🌐 Presión hPa</th>
+            <th>📏 Altitud m</th>
+            <th>⚡ Voltaje V</th>
+            <th>☀️ Luz lux</th>
+            <th>Dispositivo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let l of lecturasPaginadas; let i = index"
+              [class.fila-alerta]="l.temperatura > 28 || l.temperatura < 18 || l.voltaje < 3.0">
+            <td>{{ pagina * 20 + i + 1 }}</td>
+            <td>{{ l.created_at | date:'dd/MM/yy HH:mm:ss' }}</td>
+            <td [class.valor-alerta]="l.temperatura > 28 || l.temperatura < 18">
+              {{ l.temperatura | number:'1.1-1' }}
+            </td>
+            <td [class.valor-alerta]="l.humedad > 70 || l.humedad < 30">
+              {{ l.humedad | number:'1.1-1' }}
+            </td>
+            <td>{{ l.presion | number:'1.1-1' }}</td>
+            <td>{{ l.altitud | number:'1.1-1' }}</td>
+            <td [class.valor-alerta]="l.voltaje < 3.0 || l.voltaje > 4.0">
+              {{ l.voltaje | number:'1.2-2' }}
+            </td>
+            <td>{{ l.luz }}</td>
+            <td>{{ l.dispositivo }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PAGINACION -->
+    <div class="paginacion">
+      <button (click)="anterior()" [disabled]="pagina === 0">← Anterior</button>
+      <span>Página {{ pagina + 1 }} de {{ totalPaginas }}</span>
+      <button (click)="siguiente()" [disabled]="pagina >= totalPaginas - 1">Siguiente →</button>
+    </div>
+  </div>
+</div>

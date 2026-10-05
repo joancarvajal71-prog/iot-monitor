@@ -1,0 +1,111 @@
+<div class="graficas">
+  <div class="page-header">
+    <h1>📊 Gráficas en Tiempo Real</h1>
+    <span>Últimas 20 lecturas del ESP32</span>
+  </div>
+
+  <div class="cargando" *ngIf="cargando">
+    <div class="spinner"></div>
+    <p>Cargando datos...</p>
+  </div>
+
+  <div class="contenido" *ngIf="!cargando">
+
+    <!-- ESTADISTICAS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">🌡️ Temp. Promedio</div>
+        <div class="stat-valor">{{ getPromedio(getTemperaturas()) }}°C</div>
+        <div class="stat-rango">Min: {{ getMin(getTemperaturas()) }} | Max: {{ getMax(getTemperaturas()) }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">💧 Humedad Promedio</div>
+        <div class="stat-valor">{{ getPromedio(getHumedades()) }}%</div>
+        <div class="stat-rango">Min: {{ getMin(getHumedades()) }} | Max: {{ getMax(getHumedades()) }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">⚡ Voltaje Promedio</div>
+        <div class="stat-valor">{{ getPromedio(getVoltajes()) }}V</div>
+        <div class="stat-rango">Min: {{ getMin(getVoltajes()) }} | Max: {{ getMax(getVoltajes()) }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">☀️ Luz Promedio</div>
+        <div class="stat-valor">{{ getPromedio(getLuces()) }} lux</div>
+        <div class="stat-rango">Min: {{ getMin(getLuces()) }} | Max: {{ getMax(getLuces()) }}</div>
+      </div>
+    </div>
+
+    <!-- GRAFICA TEMPERATURA -->
+    <div class="grafica-card">
+      <div class="grafica-header">
+        <span>🌡️ Temperatura (°C)</span>
+        <span class="grafica-badge">Límite: 28°C</span>
+      </div>
+      <div class="barras">
+        <div class="barra-wrap" *ngFor="let l of lecturas; let i = index">
+          <div class="barra"
+               [style.height]="getAltura(l.temperatura, 40)"
+               [class.barra-alerta]="l.temperatura > 28 || l.temperatura < 18"
+               [title]="l.temperatura + '°C'">
+          </div>
+          <div class="barra-valor">{{ l.temperatura }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRAFICA HUMEDAD -->
+    <div class="grafica-card">
+      <div class="grafica-header">
+        <span>💧 Humedad (%)</span>
+        <span class="grafica-badge azul">Rango: 30-70%</span>
+      </div>
+      <div class="barras">
+        <div class="barra-wrap" *ngFor="let l of lecturas">
+          <div class="barra barra-azul"
+               [style.height]="getAltura(l.humedad, 100)"
+               [class.barra-alerta]="l.humedad > 70 || l.humedad < 30"
+               [title]="l.humedad + '%'">
+          </div>
+          <div class="barra-valor">{{ l.humedad }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRAFICA VOLTAJE Y LUZ -->
+    <div class="graficas-doble">
+      <div class="grafica-card">
+        <div class="grafica-header">
+          <span>⚡ Voltaje (V)</span>
+          <span class="grafica-badge verde">Rango: 3.0-4.0V</span>
+        </div>
+        <div class="barras">
+          <div class="barra-wrap" *ngFor="let l of lecturas">
+            <div class="barra barra-verde"
+                 [style.height]="getAltura(l.voltaje, 5)"
+                 [class.barra-alerta]="l.voltaje < 3.0 || l.voltaje > 4.0"
+                 [title]="l.voltaje + 'V'">
+            </div>
+            <div class="barra-valor">{{ l.voltaje }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grafica-card">
+        <div class="grafica-header">
+          <span>☀️ Luz (lux)</span>
+          <span class="grafica-badge amarillo">Rango: 100-1200</span>
+        </div>
+        <div class="barras">
+          <div class="barra-wrap" *ngFor="let l of lecturas">
+            <div class="barra barra-amarillo"
+                 [style.height]="getAltura(l.luz, 1500)"
+                 [title]="l.luz + ' lux'">
+            </div>
+            <div class="barra-valor">{{ l.luz }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
