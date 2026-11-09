@@ -185,3 +185,25 @@
   color: rgba(255,255,255,0.4);
   margin: 0;
 }
+
+.ciclos-panel {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-top: 1rem;
+}
+
+.ciclos-panel h3 {
+  font-size: 13px;
+  color: #C9A84C;
+  margin: 0 0 0.875rem;
+}
+
+.ciclo-item {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-family: monospace;
+}

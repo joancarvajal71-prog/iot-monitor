@@ -4,7 +4,9 @@
     <span>Monitoreo de valores fuera de rango</span>
   </div>
 
-  <!-- RESUMEN -->
+/////
+
+
   <div class="resumen">
     <div class="resumen-card rojo">
       <div class="resumen-valor">{{ totalPendientes }}</div>
@@ -20,23 +22,25 @@
     </div>
   </div>
 
-  <!-- FILTROS -->
+  
   <div class="filtros">
     <button [class.activo]="filtro === 'todas'" (click)="filtro = 'todas'">Todas</button>
     <button [class.activo]="filtro === 'pendientes'" (click)="filtro = 'pendientes'">Pendientes</button>
     <button [class.activo]="filtro === 'resueltas'" (click)="filtro = 'resueltas'">Resueltas</button>
   </div>
 
-  <!-- CARGANDO -->
+
+  //////
+ 
   <div class="cargando" *ngIf="cargando">
     <div class="spinner"></div>
     <p>Cargando alertas...</p>
   </div>
 
-  <!-- LISTA ALERTAS -->
+  
   <div class="lista" *ngIf="!cargando">
     <div class="vacio" *ngIf="alertasFiltradas.length === 0">
-      ✅ No hay alertas en esta categoría
+       No hay alertas en esta categoría
     </div>
     <div class="alerta-card" *ngFor="let a of alertasFiltradas"
          [class.resuelta]="a.resuelta">

@@ -1,6 +1,5 @@
 <div class="dashboard">
 
-  <!-- HEADER -->
   <div class="header">
     <div class="header-left">
       <h1>🔬 Sistema de Monitoreo IoT</h1>
@@ -13,13 +12,13 @@
     </div>
   </div>
 
-  <!-- CARGANDO -->
+  
   <div class="cargando" *ngIf="cargando">
     <div class="spinner"></div>
     <p>Conectando con sensores...</p>
   </div>
 
-  <!-- TARJETAS SENSORES -->
+  
   <div class="tarjetas" *ngIf="!cargando">
     <div class="tarjeta" *ngFor="let s of sensores"
          [class.alerta]="ultimaLectura && getEstado(s.key, getValor(s.key)!) === 'alerta'">
@@ -36,7 +35,6 @@
     </div>
   </div>
 
-  <!-- ALERTAS ACTIVAS -->
   <div class="alertas-panel" *ngIf="alertasActivas.length > 0">
     <h2>⚠️ Alertas activas ({{ alertasActivas.length }})</h2>
     <div class="alerta-item" *ngFor="let a of alertasActivas">
@@ -51,10 +49,18 @@
     </div>
   </div>
 
-  <!-- ULTIMA LECTURA -->
+  
   <div class="ultima-lectura" *ngIf="ultimaLectura">
     <h2>📡 Última lectura</h2>
     <p>{{ ultimaLectura.created_at | date:'dd/MM/yyyy HH:mm:ss' }} · Dispositivo: {{ ultimaLectura.dispositivo }}</p>
   </div>
+
+<div class="ciclos-panel">
+  <h3>🔬 Log de Ciclos de Vida</h3>
+  <div class="ciclo-item" *ngFor="let log of logCiclos">
+    {{ log }}
+  </div>
+</div>
+
 
 </div>

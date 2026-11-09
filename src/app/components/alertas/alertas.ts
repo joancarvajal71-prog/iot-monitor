@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SupabaseService } from '../../services/supabase';
 
+
+
+
 @Component({
   selector: 'app-alertas',
   standalone: true,
@@ -14,11 +17,27 @@ export class Alertas implements OnInit {
   cargando = true;
   filtro = 'todas';
 
+
+
+//
+  
+
   constructor(private supabase: SupabaseService) {}
+
+
+
+
+  //
+
+
 
   async ngOnInit() {
     await this.cargarAlertas();
   }
+//
+
+
+
 
   async cargarAlertas() {
     this.cargando = true;
