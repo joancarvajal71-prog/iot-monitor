@@ -21,6 +21,7 @@ export class DashboardComponent implements OnInit, OnChanges, OnDestroy {
   suscripcion: any;
   suscripcionAlertas: any;
   cargando = true;
+  conectado = false;
   timer: any;
   logCiclos: string[] = [];
 
@@ -96,7 +97,7 @@ export class DashboardComponent implements OnInit, OnChanges, OnDestroy {
       console.error('Error:', e);
     } finally {
       this.cargando = false;
-      this.cdr.detectChanges();
+      this.actualizarConexion();
     }
   }
 
@@ -104,7 +105,7 @@ export class DashboardComponent implements OnInit, OnChanges, OnDestroy {
     this.suscripcion = this.supabase.suscribirLecturas((nueva: any) => {
       this.ultimaLectura = nueva;
       this.agregarLog(`📥 Nueva lectura recibida — Temp: ${nueva.temperatura}°C`);
-      this.cdr.detectChanges();
+      this.actualizarConexion();
     });
     this.suscripcionAlertas = this.supabase.suscribirAlertas((nueva: any) => {
       this.alertasActivas = [nueva, ...this.alertasActivas];
@@ -116,10 +117,22 @@ export class DashboardComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   iniciarTimer() {
-    this.timer = setInterval(() => {
-      console.log('Timer activo — verificando sensores...');
-    }, 30000);
-    this.agregarLog('⏱️ Timer iniciado — verificacion cada 30 segundos');
+    this.timer = setInterval(() => this.actualizarConexion(), 3000);
+    this.agregarLog('⏱️ Timer iniciado — verificación de conexión cada 3 segundos');
+    this.actualizarConexion();
+  }
+
+  // Considera "conectado" si la última lectura tiene menos de 15 segundos
+  actualizarConexion() {
+    if (!this.ultimaLectura?.created_at) {
+      this.conectado = false;
+    } else {
+      let fecha = this.ultimaLectura.created_at as string;
+      // Supabase devuelve la hora en UTC sin la "Z"; se añade para interpretarla bien
+      if (!/Z|[+-]\d\d:?\d\d$/.test(fecha)) fecha += 'Z';
+      const segundos = (Date.now() - new Date(fecha).getTime()) / 1000;
+      this.conectado = segundos < 15;
+    }
     this.cdr.detectChanges();
   }
 
